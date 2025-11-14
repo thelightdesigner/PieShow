@@ -26,7 +26,19 @@ def colorWipe(strip, color, wait_ms=50):
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, color)
         strip.show()
-      #  time.sleep(wait_ms / 1000.0)
+        time.sleep(wait_ms / 1000.0)
+
+def setAll(strip, color):
+    for i in range(strip.numPixels()):
+        strip.setPixelColor(i, Color(255,255,255))
+
+def strobe(strip, ontime):
+    setAll(strip, Color(255,255,255))
+    strip.show()
+    time.sleep(ontime)
+    setAll(strip, Color(0,0,0))
+    strip.show()
+    time.sleep(ontime)
 
 
 def theaterChase(strip, color, wait_ms=50, iterations=10):
@@ -103,6 +115,8 @@ if __name__ == '__main__':
     try:
 
         while True:
+            print('Strobe 20hz.')
+            strobe(strip, 1000)
             print('Color wipe animations.')
             colorWipe(strip, Color(255, 0, 0))  # Red wipe
             colorWipe(strip, Color(0, 255, 0))  # Green wipe
