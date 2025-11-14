@@ -10,7 +10,7 @@ from rpi_ws281x import PixelStrip, Color
 import argparse
 
 # LED strip configuration:
-LED_COUNT = 16        # Number of LED pixels.
+LED_COUNT = 262        # Number of LED pixels.
 LED_PIN = 18          # GPIO pin connected to the pixels (18 uses PWM!).
 # LED_PIN = 10        # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
@@ -107,6 +107,7 @@ if __name__ == '__main__':
             colorWipe(strip, Color(255, 0, 0))  # Red wipe
             colorWipe(strip, Color(0, 255, 0))  # Green wipe
             colorWipe(strip, Color(0, 0, 255))  # Blue wipe
+            colorWipe(strip, Color(255, 255, 255))
             print('Theater chase animations.')
             theaterChase(strip, Color(127, 127, 127))  # White theater chase
             theaterChase(strip, Color(127, 0, 0))  # Red theater chase
