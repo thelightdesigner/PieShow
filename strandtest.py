@@ -35,10 +35,10 @@ def setAll(strip, color):
 def strobe(strip, ontime):
     setAll(strip, Color(255,255,255))
     strip.show()
-    time.sleep(ontime)
+    time.sleep(ontime / 1000.0)
     setAll(strip, Color(0,0,0))
     strip.show()
-    time.sleep(ontime)
+    time.sleep(ontime / 1000.0)
 
 
 def theaterChase(strip, color, wait_ms=50, iterations=10):
