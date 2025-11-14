@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 # NeoPixel library strandtest example
 # Author: Tony DiCola (tony@tonydicola.com)
 #
@@ -31,7 +32,7 @@ def renderPieShowFile(strip, bin)
 
 def setAll(strip, color):
     for i in range(strip.numPixels()):
-        strip.setPixelColor(i, Color(255,255,255))
+        strip.setPixelColor(i, color)
 
 
 # Main program logic follows:
