@@ -31,7 +31,21 @@ def renderPieShowFile(strip, bin):
     print(num_leds)
     print(num_frames)
     print(frames_per_second)
-    
+
+
+    len_seconds = num_frames / frames_per_second
+    print(len_seconds)
+    print(list(bin))
+
+
+
+    for f in range(num_frames):
+        for p in range(num_leds):
+            i = idx_led_start + p*3 + f * num_leds*3
+            print(i)
+            strip.setPixelColor(p, Color(bin[i], bin[i+1], bin[i+2]))
+        strip.show()
+        time.sleep(1 / frames_per_second)
     #loop through all leds in led len
     
     #show
