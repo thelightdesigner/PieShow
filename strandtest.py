@@ -20,9 +20,17 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-def renderPieShowFile(strip, bin)
+def renderPieShowFile(strip, bin):
     #parse len, fps, ect.
-    print(list(bin))
+    idx_led_start = int.from_bytes(bin[0:4], byteorder='big', signed=False)
+    num_leds = int.from_bytes(bin[4:8], byteorder='big', signed=False)
+    num_frames = int.from_bytes(bin[8:12], byteorder='big', signed=False)
+    frames_per_second = int.from_bytes(bin[12:16], byteorder='big', signed=False)
+
+    print(idx_led_start)
+    print(num_leds)
+    print(num_frames)
+    print(frames_per_second)
     
     #loop through all leds in led len
     
@@ -67,7 +75,7 @@ if __name__ == '__main__':
         print('Rendering show...')
         renderPieShowFile(strip, pieShowBin)
             
-        while args.loop
+        while args.loop:
             print('Looping show...')
             renderPieShowFile(strip, pieShowBin)
 
