@@ -7,6 +7,7 @@
 # various animations on a strip of NeoPixels.
 
 import time
+import math
 from rpi_ws281x import PixelStrip, Color
 from PIL import Image
 import argparse
@@ -19,19 +20,32 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-def renderPieShowFile(strip, img):
+def renderPieShowFile(strip, img, fps):
     pixels = img.load()
     width, height = img.size
     
     print('Pixel Count: ',width)
     print('Frames: ', height)
+    print('FPS: ', fps)
     
-    for frame in range(height):
+    durationSeconds = height/fps
+
+    startTimeSeconds = time.time()
+    now = 0
+    frameCount = 0
+
+    while (now <= durationSeconds):
         for led in range(width):
-            strip.setPixelColor(p, pixels[led,frame])
-       
+            frame = math.floor(now * fps)
+            (r,g,b)  = pixels[led,frame]
+            strip.setPixelColor(led, Color(r, g, b))
+
         strip.show()
-        time.sleep(1)
+
+        frameCount += 1
+        print("Frame ", frame, ", FPS: ", (frameCount / now) if now > 0.5 else 0)
+
+        now = time.time() - startTimeSeconds
             
     
 
@@ -56,11 +70,11 @@ if __name__ == '__main__':
         pieShowImage = Image.open(filename)
         
         print('Rendering show...')
-        renderPieShowFile(strip, pieShowImage)
+        renderPieShowFile(strip, pieShowImage, 1)
         
         while args.loop:
             print('Looping show...')
-            renderPieShowFile(strip, pieShowBin)
+            renderPieShowFile(strip, pieShowImage, 25)
 
     except KeyboardInterrupt:
         if args.clear:
