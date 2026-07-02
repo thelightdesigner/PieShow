@@ -6,6 +6,7 @@
 # Direct port of the Arduino NeoPixel library strandtest example.  Showcases
 # various animations on a strip of NeoPixels.
 
+import threading
 import time
 import math
 from rpi_ws281x import PixelStrip, Color
@@ -20,7 +21,7 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-def renderPieShowFile(strip, img, fps):
+def renderPieShowFile(strip, img, fps, tid):
     pixels = img.load()
     width, height = img.size
     
@@ -37,14 +38,14 @@ def renderPieShowFile(strip, img, fps):
     while (now <= durationSeconds):
         frame = math.floor(now * fps)
 
-#        for led in range(width):
-#            (r,g,b)  = pixels[led,frame]
-#            strip.setPixelColor(led, Color(r, g, b))
+        for led in range(width):
+            (r,g,b)  = pixels[led,frame]
+            strip.setPixelColor(led, Color(r, g, b))
 
         strip.show()
 
         frameCount += 1
-        print("Frame ", frame, ", FPS: ", (frameCount / now) if now > 0.5 else 0)
+        print("[TID", tid, "] Frame ", frame, ", FPS: ", (frameCount / now) if now > 0.5 else 0)
 
         now = time.time() - startTimeSeconds
             
@@ -61,9 +62,14 @@ if __name__ == '__main__':
     parser.add_argument('-l', '--loop', action='store_true', help='loop the file on completion')
     parser.add_argument('-w','--white', action='store_true', help='make the whole strip white')
     parser.add_argument('-s','--snake', action='store_true', help='')
+    parser.add_argument('-t','--two', action='store_true', help='')
     args = parser.parse_args()
 
-    strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+    if args.two:
+        strip = PixelStrip(LED_COUNT, 19, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, 1)
+    else:
+        strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+        
     strip.begin()
     
     if args.snake:
@@ -74,12 +80,15 @@ if __name__ == '__main__':
             if (index >= LED_COUNT-15):
                 index = 0
             setAll(strip, black)
+            #setAll(strip2, black)
           #  for i in range(index, index+15):
             strip.setPixelColor(index, white)
+            #strip2.setPixelColor(index, white)
      #       strip.show()
      #       time.sleep(0.05)
      #       setAll(strip, black)
             strip.show()
+            #strip2.show()
      #       time.sleep(0.05)
             index += 1
 
@@ -98,13 +107,28 @@ if __name__ == '__main__':
         print('Reading PieShow image... ['+filename+']')
         
         pieShowImage = Image.open(filename)
+        #pieShowImage2 = Image.open(filename)
         
         print('Rendering show...')
-        renderPieShowFile(strip, pieShowImage, 1)
+        
+        #threads = []
+        #threads.append(threading.Thread(target=renderPieShowFile, args=(strip, pieShowImage, 1, 0)))
+        #threads.append(threading.Thread(target=renderPieShowFile, args=(strip2, pieShowImage2, 1, 1)))
+        renderPieShowFile(strip, pieShowImage, 1, 1 if args.two else 0)
+       # print('Starting threads')
+       # while True:
+       #     for t in threads:
+       #         t.start()
+
+        #    print('Waiting...')
+         #   for t in threads:
+          #      t.join()
+
+           # print('All joined')
         
         while args.loop:
             print('Looping show...')
-            renderPieShowFile(strip, pieShowImage, 5)
+            renderPieShowFile(strip, pieShowImage, 2, 1 if args.two else 0)
 
     except KeyboardInterrupt:
         if args.clear:
