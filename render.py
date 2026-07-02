@@ -6,6 +6,7 @@
 # Direct port of the Arduino NeoPixel library strandtest example.  Showcases
 # various animations on a strip of NeoPixels.
 
+import os
 import time
 import math
 from rpi_ws281x import PixelStrip, Color
@@ -18,9 +19,10 @@ class LEDTape:
     LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
     LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
     
-    def __init__(self, lightID, DMAChannel, GPIO, pixelCount):
+    def __init__(self, lightID, DMAChannel, GPIO, pixelCount, name):
         self.lightID = lightID
-        self.strip = PixelStrip(pixelCount, GPIO, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, DMAChannel)
+        self.name = name
+        self.strip = PixelStrip(pixelCount, GPIO, self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, DMAChannel)
         self.strip.begin()
 
     def renderPieShowFile(self, img, fps, sysstarttime):
@@ -37,17 +39,22 @@ class LEDTape:
         now = time.time() - startTimeSeconds
         frameCount = 0
 
-        while (now <= durationSeconds):
-            frame = math.floor(now * fps)
+        while (now <= 0):
+            now = time.time() - startTimeSeconds
+            #busy wait until its time to start
 
+        while (now <= durationSeconds):
+            print('now', now)
+            frame = max(0, math.floor(now * fps))
+            
             for led in range(width):
                 (r,g,b)  = pixels[led,frame]
-                strip.setPixelColor(led, Color(r, g, b))
+                self.strip.setPixelColor(led, Color(r, g, b))
 
-            strip.show()
+            self.strip.show()
 
             frameCount += 1
-            print("[TID", tid, "] Frame ", frame, ", FPS: ", (frameCount / now) if now > 0.5 else 0)
+            print("[", self.name, "] Frame ", frame, ", FPS: ", (frameCount / now) if now > 0.5 else 0, " Skipped: ", frame - frameCount)
 
             now = time.time() - startTimeSeconds
 
@@ -67,6 +74,6 @@ class LEDTape:
             if (index >= LED_COUNT-15):
                 index = 0
             setAll(strip, black)
-            strip.setPixelColor(index, white)
-            strip.show()
+            self.strip.setPixelColor(index, white)
+            self.strip.show()
             index += 1
