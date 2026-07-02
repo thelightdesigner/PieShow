@@ -1,0 +1,43 @@
+{
+    "name": "Skye & August Discrete",
+    "controlMethod": "COMMAND",
+    "startRaveListeningPin": -1,
+    "devices": {
+        "LEDTape": [
+            {
+                "lightID": 0,
+                "channel": 0,
+                "GPIO": 18,
+                "pixels": 666,
+                "startColumn": 0
+            },
+            {
+                "lightID": 1,
+                "channel": 1,
+                "GPIO": 19,
+                "pixels": 666,
+                "startColumn": 0
+            }
+        ],
+        "smartBulbs": [
+            {
+                "name": "Can Light #1",
+                "lightID": 2,
+                "type": "TUYA",
+                "address": "",
+                "deviceID": "",
+                "version": "",
+                "localKey": "",
+                "startColumn": 666
+            },
+            {
+                "name": "Kitchen Light",
+                "lightID": 3,
+                "type": "TASMOTA",
+                "address": "",
+                "startColumn": 666
+            }
+        ],
+        "blinders": []
+    }
+}
