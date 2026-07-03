@@ -41,6 +41,24 @@ if __name__ == '__main__':
     
     LEDStrip = LEDTape(ledTapeInfo['lightID'], ledTapeInfo['name'], ledTapeChannels[0]['GPIO'], ledTapeChannels[1]['GPIO'], ledTapeChannels[0]['pixels'], ledTapeChannels[1]['pixels'])
     
+    if args.index:
+        idx = 0
+        ch = 0
+        while True:
+            print("idx=", idx, "ch=", ch)
+            _in = input()
+            LEDStrip.setAll(Color(0,0,0))
+            LEDStrip.set(ch, idx, Color(100,100,100))
+            LEDStrip.show()
+            idx += 1
+            if (idx >= ledTapeChannels[0]['pixels']):
+                idx = 0
+                ch = 1
+            elif (idx >= ledTapeChannels[1]['pixels']):
+               idx = 0
+               ch = 0
+
+    
     print('Reading maps')
     mapFiles = os.listdir('maps')
     print('Map files: ', mapFiles)

@@ -43,13 +43,11 @@ class LEDTape:
         while (now <= durationSeconds):
             frame = max(0, math.floor(now * fps))
             
-            for led in range(width):
+            for led in range(min(self.C1, width)):
                 (r,g,b) = pixels[led,frame]
                 c = mColor(r,g,b)
-                if (led < self.C1_LEN):
-                    self.strip.setPixelColor(0, led, c)
-                else:
-                    self.strip.setPixelColor(1, led-self.C1_LEN, c)
+                self.strip.setPixelColor(0, led, c)
+                self.strip.setPixelColor(1, led, c)
 
             self.strip.show()
             frameCount += 1
@@ -59,14 +57,9 @@ class LEDTape:
 
 
     def setAll(self, color):
-        for i in range(self.C1_LEN):
-            self.strip.setPixelColor(0, i, color)
-        for i in range(self.C2_LEN):
-            self.strip.setPixelColor(1, i, color)
-
-
-    def set(self, ch, led, color):
-        self.strip.setPixelColor(ch, led, color)
+        for ch in range(2):
+            for i in range(self.strip.numPixels()):
+                self.strip.setPixelColor(ch, i, color)
 
     def show(self):
         self.strip.show()
