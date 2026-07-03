@@ -22,10 +22,14 @@ class LEDTape:
     def __init__(self, lightID, DMAChannel, GPIO, pixelCount, name):
         self.lightID = lightID
         self.name = name
-        self.strip = PixelStrip(pixelCount, GPIO, self.LED_FREQ_HZ, self.LED_DMA, self.LED_INVERT, self.LED_BRIGHTNESS, DMAChannel)
+        self.GPIO = GPIO
+        self.pixelCount = pixelCount
+        self.DMAChannel = DMAChannel
+        self.strip = PixelStrip(self.pixelCount, self.GPIO, self.LED_FREQ_HZ, DMAChannel, self.LED_INVERT, self.LED_BRIGHTNESS, self.DMAChannel)
         self.strip.begin()
 
-    def renderPieShowFile(self, img, fps, sysstarttime):
+    def renderPieShowFile(self, img, fps, sysstarttime, lock):
+        print("[",self.name,"] DMA: ", DMA)
         pixels = img.load()
         width, height = img.size
         
@@ -47,11 +51,15 @@ class LEDTape:
             print('now', now)
             frame = max(0, math.floor(now * fps))
             
+            
             for led in range(width):
-                (r,g,b)  = pixels[led,frame]
-                self.strip.setPixelColor(led, Color(r, g, b))
+                (r,g,b) = pixels[led,frame]
+                self.strip.setPixelColor(led, Color(r,g,b))
 
+
+#            lock.acquire()
             self.strip.show()
+#            lock.release()
 
             frameCount += 1
             print("[", self.name, "] Frame ", frame, ", FPS: ", (frameCount / now) if now > 0.5 else 0, " Skipped: ", frame - frameCount)

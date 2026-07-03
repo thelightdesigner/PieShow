@@ -4,6 +4,7 @@ import json
 import time
 import math
 import argparse
+from multiprocessing import Process, Lock
 
 from rpi_ws281x import PixelStrip, Color
 from PIL import Image
@@ -21,6 +22,7 @@ if __name__ == '__main__':
     parser.add_argument('-w','--white', action='store_true', help='make the whole strip white')
     parser.add_argument('-s','--snake', action='store_true', help='')
     parser.add_argument('-t','--two', action='store_true', help='')
+    parser.add_argument('-i', '--index', action='store_true', help='')
     args = parser.parse_args()
     
     print('Loading config.json')
@@ -52,18 +54,24 @@ if __name__ == '__main__':
     
     print('Reading PieShow image... ['+pieShowImagePath+']')
     
-    pieShowImage = Image.open(pieShowImagePath)
+    pieShowImage1 = Image.open(pieShowImagePath)
+    pieShowImage2 = Image.open(pieShowImagePath)
     
     print('Rendering show...')
     timeToStart = time.time() + 5
-    LEDStrips[0].renderPieShowFile(pieShowImage, mapInfo['FPS'], timeToStart)
     
+    lock = Lock()
+    p1 = Process(target=LEDStrips[0].renderPieShowFile, args=(pieShowImage1, mapInfo['FPS'], timeToStart, lock))
+#    p2 = Process(target=LEDStrips[1].renderPieShowFile, args=(pieShowImage2, mapInfo['FPS'], timeToStart, lock))
+    
+    p1.start()
+#    p2.start()
+
+    p1.join()
+#    p2.join()
+
     LEDStrips[0].setAll(Color(0,0,0))
     LEDStrips[0].show()
     
-    LEDStrips[1].renderPieShowFile(pieShowImage, mapInfo['FPS'], time.time())
-    
     LEDStrips[1].setAll(Color(0,0,0))
     LEDStrips[1].show()
-
-
