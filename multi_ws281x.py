@@ -191,5 +191,5 @@ class mPixelStrip:
         return mRGBW(self[n])
 
 # Shim for back-compatibility
-class Adafruit_NeoPixel(PixelStrip):
+class Adafruit_NeoPixel(mPixelStrip):
     pass

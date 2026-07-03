@@ -29,7 +29,7 @@ class LEDTape:
         self.strip.begin()
 
     def renderPieShowFile(self, img, fps, sysstarttime, lock):
-        print("[",self.name,"] DMA: ", DMA)
+#        print("[",self.name,"] DMA: ", DMA)
         pixels = img.load()
         width, height = img.size
         
