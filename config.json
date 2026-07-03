@@ -3,24 +3,24 @@
     "controlMethod": "COMMAND",
     "startRaveListeningPin": -1,
     "devices": {
-        "LEDTape": [
-            {
-                "lightID": 0,
-                "channel": 0,
-                "GPIO": 18,
-                "pixels": 666,
-                "startColumn": 0,
-                "name": "LivingRoom"
-            },
-            {
-                "lightID": 1,
-                "channel": 1,
-                "GPIO": 19,
-                "pixels": 666,
-                "name": "Kitchen",
-                "startColumn": 0
-            }
-        ],
+        "LEDTape": 
+        {
+            "lightID": 0,
+            "startColumn": 0,
+            "name": "LivingRoom",
+            "channels": [
+                {
+                    "channel": 0,
+                    "GPIO": 18,
+                    "pixels": 666
+                },
+                {
+                    "channel": 1,
+                    "GPIO": 19,
+                    "pixels": 666
+                }
+            ]
+        },
         "smartBulbs": [
             {
                 "name": "Can Light #1",

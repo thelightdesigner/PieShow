@@ -14,22 +14,18 @@ from PIL import Image
 import argparse
 
 class LEDTape:
-    LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
-    LED_DMA = 10          # DMA channel to use for generating signal (try 10)
-    LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
-    LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
     
-    def __init__(self, lightID, DMAChannel, GPIO, pixelCount, name):
+    def __init__(self, lightID, name, C1_GPIO, C2_GPIO, C1_LEN, C2_LEN):
         self.lightID = lightID
         self.name = name
-        self.GPIO = GPIO
-        self.pixelCount = pixelCount
-        self.DMAChannel = DMAChannel
-        self.strip = mPixelStrip(self.pixelCount, self.GPIO, self.LED_FREQ_HZ, DMAChannel, self.LED_INVERT, self.LED_BRIGHTNESS, self.DMAChannel)
+        self.C1_GPIO = C1_GPIO
+        self.C2_GPIO = C2_GPIO
+        self.C1_LEN = C1_LEN
+        self.C2_LEN = C2_LEN
+        self.strip = mPixelStrip(C1_GPIO, C2_GPIO, C1_LEN, C2_LEN)
         self.strip.begin()
 
-    def renderPieShowFile(self, img, fps, sysstarttime, lock):
-#        print("[",self.name,"] DMA: ", DMA)
+    def renderPieShowFile(self, img, fps):
         pixels = img.load()
         width, height = img.size
         
@@ -39,28 +35,18 @@ class LEDTape:
         
         durationSeconds = height/fps
 
-        startTimeSeconds = sysstarttime
+        startTimeSeconds = time.time()
         now = time.time() - startTimeSeconds
         frameCount = 0
 
-        while (now <= 0):
-            now = time.time() - startTimeSeconds
-            #busy wait until its time to start
-
         while (now <= durationSeconds):
-            print('now', now)
             frame = max(0, math.floor(now * fps))
-            
             
             for led in range(width):
                 (r,g,b) = pixels[led,frame]
-                self.strip.setPixelColor(led, mColor(r,g,b))
+                self.strip.setPixelColor(0, led, mColor(r,g,b))
 
-
-#            lock.acquire()
             self.strip.show()
-#            lock.release()
-
             frameCount += 1
             print("[", self.name, "] Frame ", frame, ", FPS: ", (frameCount / now) if now > 0.5 else 0, " Skipped: ", frame - frameCount)
 
@@ -68,20 +54,9 @@ class LEDTape:
 
 
     def setAll(self, color):
-        for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, color)
+        for ch in range(2):
+            for i in range(self.strip.numPixels()):
+                self.strip.setPixelColor(ch, i, color)
 
     def show(self):
         self.strip.show()
-
-    def snake(self):
-        black = mColor(0,0,0)
-        white = mColor(255, 255, 255)
-        index = 0
-        while True:
-            if (index >= LED_COUNT-15):
-                index = 0
-            setAll(strip, black)
-            self.strip.setPixelColor(index, white)
-            self.strip.show()
-            index += 1

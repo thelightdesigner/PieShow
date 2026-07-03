@@ -4,7 +4,6 @@ import json
 import time
 import math
 import argparse
-from multiprocessing import Process, Lock
 
 from multi_ws281x import mPixelStrip, mColor
 from PIL import Image
@@ -12,7 +11,7 @@ from render import LEDTape
 
 from rpi_ws281x import PixelStrip, Color
 
-LEDStrips = []
+LEDStrip = None
 SmartBulbs = []
 
 if __name__ == '__main__':
@@ -34,8 +33,13 @@ if __name__ == '__main__':
     print(config)
     
     print('Initializing LEDTapes')
-    for ledTapeInfo in config['devices']['LEDTape']:
-        LEDStrips.append(LEDTape(ledTapeInfo['lightID'], ledTapeInfo['channel'], ledTapeInfo['GPIO'], ledTapeInfo['pixels'], ledTapeInfo['name']))
+    
+    ledTapeInfo = config['devices']['LEDTape']
+    ledTapeChannels = config['devices']['LEDTape']
+    if ledTapeChannels.count != 2:
+        raise Exception('Must have 2 channels TODO fix')
+    
+    LEDStrip = LEDTape(ledTapeInfo['lightID'], ledTapeInfo['name'], ledTapeChannels[0]['GPIO'], ledTapeChannels[1]['GPIO'], ledTapeChannels[0]['pixels'], ledTapeChannels[1]['pixels']))
     
     print('Reading maps')
     mapFiles = os.listdir('maps')
@@ -54,24 +58,10 @@ if __name__ == '__main__':
     
     print('Reading PieShow image... ['+pieShowImagePath+']')
     
-    pieShowImage1 = Image.open(pieShowImagePath)
-    pieShowImage2 = Image.open(pieShowImagePath)
+    pieShowImage = Image.open(pieShowImagePath)
     
     print('Rendering show...')
-    timeToStart = time.time() + 5
-    
-    lock = Lock()
-    p1 = Process(target=LEDStrips[0].renderPieShowFile, args=(pieShowImage1, mapInfo['FPS'], timeToStart, lock))
-#    p2 = Process(target=LEDStrips[1].renderPieShowFile, args=(pieShowImage2, mapInfo['FPS'], timeToStart, lock))
-    
-    p1.start()
-#    p2.start()
+    LEDStrip.renderPieShowFile(pieShowImage, mapInfo['fps'])
 
-    p1.join()
-#    p2.join()
-
-    LEDStrips[0].setAll(mColor(0,0,0))
-    LEDStrips[0].show()
-    
-    LEDStrips[1].setAll(mColor(0,0,0))
-    LEDStrips[1].show()
+    LEDStrips.setAll(mColor(0,0,0))
+    LEDStrips.show()
