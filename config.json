@@ -12,12 +12,12 @@
                 {
                     "channel": 0,
                     "GPIO": 18,
-                    "pixels": 666
+                    "pixels": 677
                 },
                 {
                     "channel": 1,
                     "GPIO": 19,
-                    "pixels": 666
+                    "pixels": 668
                 }
             ]
         },
