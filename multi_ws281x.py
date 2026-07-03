@@ -34,8 +34,8 @@ def mColor(red, green, blue, white=0):
 
 
 class mPixelStrip:
-    def __init__(c0pin, c1pin, c0count, c1count)
-
+    def __init__(self, c0pin, c1pin, c0count, c1count):
+        freq_hz=800000
         dma=10
         invert=False
         brightness=255
@@ -70,14 +70,14 @@ class mPixelStrip:
         self._channels.append( ws.ws2811_channel_get(self._leds, 1))
 
         ws.ws2811_channel_t_gamma_set(self._channels[0], gamma)
-        ws.ws2811_channel_t_count_set(self._channels[0], c0num)
+        ws.ws2811_channel_t_count_set(self._channels[0], c0count)
         ws.ws2811_channel_t_gpionum_set(self._channels[0], c0pin)
         ws.ws2811_channel_t_invert_set(self._channels[0], 0 if not invert else 1)
         ws.ws2811_channel_t_brightness_set(self._channels[0], brightness)
         ws.ws2811_channel_t_strip_type_set(self._channels[0], strip_type)
         
         ws.ws2811_channel_t_gamma_set(self._channels[1], gamma)
-        ws.ws2811_channel_t_count_set(self._channels[1], c1num)
+        ws.ws2811_channel_t_count_set(self._channels[1], c1count)
         ws.ws2811_channel_t_gpionum_set(self._channels[1], c1pin)
         ws.ws2811_channel_t_invert_set(self._channels[1], 0 if not invert else 1)
         ws.ws2811_channel_t_brightness_set(self._channels[1], brightness)
@@ -96,6 +96,8 @@ class mPixelStrip:
             ws.ws2811_fini(self._leds)
             ws.delete_ws2811_t(self._leds)
             self._leds = None
+            self._channels[0] = None
+            self._channels[1] = None
             self._channels = None
 
     def begin(self):

@@ -35,11 +35,11 @@ if __name__ == '__main__':
     print('Initializing LEDTapes')
     
     ledTapeInfo = config['devices']['LEDTape']
-    ledTapeChannels = config['devices']['LEDTape']
-    if ledTapeChannels.count != 2:
-        raise Exception('Must have 2 channels TODO fix')
+    ledTapeChannels = config['devices']['LEDTape']['channels']
+    if len(ledTapeChannels) != 2:
+        raise Exception('Must have 2 channels TODO fix. Count=', len(ledTapeChannels))
     
-    LEDStrip = LEDTape(ledTapeInfo['lightID'], ledTapeInfo['name'], ledTapeChannels[0]['GPIO'], ledTapeChannels[1]['GPIO'], ledTapeChannels[0]['pixels'], ledTapeChannels[1]['pixels']))
+    LEDStrip = LEDTape(ledTapeInfo['lightID'], ledTapeInfo['name'], ledTapeChannels[0]['GPIO'], ledTapeChannels[1]['GPIO'], ledTapeChannels[0]['pixels'], ledTapeChannels[1]['pixels'])
     
     print('Reading maps')
     mapFiles = os.listdir('maps')
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     pieShowImage = Image.open(pieShowImagePath)
     
     print('Rendering show...')
-    LEDStrip.renderPieShowFile(pieShowImage, mapInfo['fps'])
+    LEDStrip.renderPieShowFile(pieShowImage, mapInfo['FPS'])
 
     LEDStrips.setAll(mColor(0,0,0))
     LEDStrips.show()

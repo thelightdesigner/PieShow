@@ -22,6 +22,7 @@ class LEDTape:
         self.C2_GPIO = C2_GPIO
         self.C1_LEN = C1_LEN
         self.C2_LEN = C2_LEN
+        print('Args: ', C1_GPIO, C2_GPIO, C1_LEN, C2_LEN)
         self.strip = mPixelStrip(C1_GPIO, C2_GPIO, C1_LEN, C2_LEN)
         self.strip.begin()
 
@@ -45,6 +46,7 @@ class LEDTape:
             for led in range(width):
                 (r,g,b) = pixels[led,frame]
                 self.strip.setPixelColor(0, led, mColor(r,g,b))
+                self.strip.setPixelColor(1, led, mColor(r,g,b))
 
             self.strip.show()
             frameCount += 1
