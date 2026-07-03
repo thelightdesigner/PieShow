@@ -9,7 +9,7 @@
 import os
 import time
 import math
-from multi_ws281x import mPixelStrip, mColor
+from multi_ws281x import mPixelStrip, mRGBW
 from PIL import Image
 import argparse
 
@@ -45,7 +45,7 @@ class LEDTape:
             
             for led in range(width):
                 (r,g,b) = pixels[led,frame]
-                c = mColor(r,g,b)
+                c = mRGBW(r,g,b)
                 if (led < self.C1_LEN):
                     self.strip.setPixelColor(0, led, c)
                 else:
@@ -53,7 +53,7 @@ class LEDTape:
 
             self.strip.show()
             frameCount += 1
-            print("[", self.name, "] Frame ", frame, ", FPS: ", (frameCount / now) if now > 0.5 else 0, " Skipped: ", frame - frameCount)
+            print("[", self.name, "] Frame ", frame, ", FPS: ", (frameCount / now) if now > 0.5 else 0, " DeltaT: ", (time.time() - startTimeSeconds) - (frame / fps))
 
             now = time.time() - startTimeSeconds
 

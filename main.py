@@ -5,7 +5,7 @@ import time
 import math
 import argparse
 
-from multi_ws281x import mPixelStrip, mColor
+from multi_ws281x import mPixelStrip, mRGBW
 from PIL import Image
 from render import LEDTape
 
@@ -47,8 +47,8 @@ if __name__ == '__main__':
         while True:
             print("idx=", idx, "ch=", ch)
             _in = input()
-            LEDStrip.setAll(Color(0,0,0))
-            LEDStrip.set(ch, idx, Color(100,100,100))
+            LEDStrip.setAll(mRGBW(0,0,0))
+            LEDStrip.set(ch, idx, mRGBW(100,100,100))
             LEDStrip.show()
             idx += 1
             if (idx >= ledTapeChannels[0]['pixels']):

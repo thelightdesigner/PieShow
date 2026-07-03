@@ -28,11 +28,6 @@ class mRGBW(int):
     def w(self):
         return (self >> 24) & 0xff
 
-
-def mColor(red, green, blue, white=0):
-    return mRGBW(red, green, blue, white)
-
-
 class mPixelStrip:
     def __init__(self, c0pin, c1pin, c0count, c1count):
         freq_hz=800000
@@ -41,7 +36,7 @@ class mPixelStrip:
         brightness=255
         strip_type=None
         gamma=None
-        
+
         if gamma is None:
             if type(strip_type) is list and len(strip_type) == 256:
                 gamma = strip_type
@@ -54,10 +49,10 @@ class mPixelStrip:
 
         # Create ws2811_t structure and fill in parameters.
         self._leds = ws.new_ws2811_t()
-        
+
         self._c0count = c0count
         self._c1count = c1count
-        
+
         for channum in range(2):
             chan = ws.ws2811_channel_get(self._leds, channum)
             ws.ws2811_channel_t_count_set(chan, 0)
