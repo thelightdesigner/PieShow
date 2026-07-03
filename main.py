@@ -6,7 +6,7 @@ import math
 import argparse
 from multiprocessing import Process, Lock
 
-from rpi_ws281x import PixelStrip, Color
+from multi_ws281x import mPixelStrip, mColor
 from PIL import Image
 from render import LEDTape
 
@@ -70,8 +70,8 @@ if __name__ == '__main__':
     p1.join()
 #    p2.join()
 
-    LEDStrips[0].setAll(Color(0,0,0))
+    LEDStrips[0].setAll(mColor(0,0,0))
     LEDStrips[0].show()
     
-    LEDStrips[1].setAll(Color(0,0,0))
+    LEDStrips[1].setAll(mColor(0,0,0))
     LEDStrips[1].show()

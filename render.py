@@ -9,7 +9,7 @@
 import os
 import time
 import math
-from rpi_ws281x import PixelStrip, Color
+from multi_ws281x import mPixelStrip, mColor
 from PIL import Image
 import argparse
 
@@ -25,7 +25,7 @@ class LEDTape:
         self.GPIO = GPIO
         self.pixelCount = pixelCount
         self.DMAChannel = DMAChannel
-        self.strip = PixelStrip(self.pixelCount, self.GPIO, self.LED_FREQ_HZ, DMAChannel, self.LED_INVERT, self.LED_BRIGHTNESS, self.DMAChannel)
+        self.strip = mPixelStrip(self.pixelCount, self.GPIO, self.LED_FREQ_HZ, DMAChannel, self.LED_INVERT, self.LED_BRIGHTNESS, self.DMAChannel)
         self.strip.begin()
 
     def renderPieShowFile(self, img, fps, sysstarttime, lock):
@@ -54,7 +54,7 @@ class LEDTape:
             
             for led in range(width):
                 (r,g,b) = pixels[led,frame]
-                self.strip.setPixelColor(led, Color(r,g,b))
+                self.strip.setPixelColor(led, mColor(r,g,b))
 
 
 #            lock.acquire()
@@ -75,8 +75,8 @@ class LEDTape:
         self.strip.show()
 
     def snake(self):
-        black = Color(0,0,0)
-        white = Color(255, 255, 255)
+        black = mColor(0,0,0)
+        white = mColor(255, 255, 255)
         index = 0
         while True:
             if (index >= LED_COUNT-15):
