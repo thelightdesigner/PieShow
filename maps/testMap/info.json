@@ -1,7 +1,7 @@
 {
     "name": "GirlyCupid",
     "system": "Skye & August Discrete",
-    "FPS":40,
+    "FPS":60,
     "songFileName":"song.ogg",
     "mapFileName":"cupid.png"
 }

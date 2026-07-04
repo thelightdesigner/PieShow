@@ -17,11 +17,12 @@ SmartBulbs = []
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
-    parser.add_argument('-l', '--loop', action='store_true', help='loop the file on completion')       
-    parser.add_argument('-w','--white', action='store_true', help='make the whole strip white')
-    parser.add_argument('-s','--snake', action='store_true', help='')
-    parser.add_argument('-t','--two', action='store_true', help='')
+ #   parser.add_argument('-l', '--loop', action='store_true', help='loop the file on completion')       
+ #   parser.add_argument('-w','--white', action='store_true', help='make the whole strip white')
+ #   parser.add_argument('-s','--snake', action='store_true', help='')
+#    parser.add_argument('-t','--two', action='store_true', help='')
     parser.add_argument('-i', '--index', action='store_true', help='')
+    parser.add_argument('-s', '--standby', action='store_true', help='')
     args = parser.parse_args()
     
     print('Loading config.json')
@@ -41,7 +42,11 @@ if __name__ == '__main__':
     
     LEDStrip = LEDTape(ledTapeInfo['lightID'], ledTapeInfo['name'], ledTapeChannels[0]['GPIO'], ledTapeChannels[1]['GPIO'], ledTapeChannels[0]['pixels'], ledTapeChannels[1]['pixels'])
     
-    if args.index:
+    if args.standby:
+        LEDStrip.setAll(mRGBW(28,14,3))
+        LEDStrip.show()
+        exit()
+    elif args.index:
         idx = 0
         ch = 0
         while True:
@@ -57,7 +62,10 @@ if __name__ == '__main__':
             elif (idx >= ledTapeChannels[1]['pixels']):
                idx = 0
                ch = 0
-
+    elif args.clear:
+        LEDStrip.setAll(mRGBW(0,0,0))
+        LEDStrip.show()
+        exit()
     
     print('Reading maps')
     mapFiles = os.listdir('maps')
