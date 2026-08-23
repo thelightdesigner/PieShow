@@ -43,7 +43,8 @@ if __name__ == '__main__':
     LEDStrip = LEDTape(ledTapeInfo['lightID'], ledTapeInfo['name'], ledTapeChannels[0]['GPIO'], ledTapeChannels[1]['GPIO'], ledTapeChannels[0]['pixels'], ledTapeChannels[1]['pixels'])
     
     if args.standby:
-        LEDStrip.setAll(mRGBW(28,14,3))
+       # LEDStrip.christmasLight()
+        LEDStrip.setAll(mRGBW(27, 16, 4))
         LEDStrip.show()
         exit()
     elif args.index:

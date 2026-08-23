@@ -6,6 +6,7 @@
 # Direct port of the Arduino NeoPixel library strandtest example.  Showcases
 # various animations on a strip of NeoPixels.
 
+import random
 import os
 import time
 import math
@@ -67,6 +68,14 @@ class LEDTape:
 
     def set(self, ch, led, color):
         self.strip.setPixelColor(ch, led, color)
+
+    def christmasLight(self):
+        for i in range(self.C1_LEN):
+            self.set(0, i, mRGBW(27, 14, 4) if random.random() > 0.8 else mRGBW(0,0,0))
+        for i in range(self.C2_LEN):
+            self.set(1, i, mRGBW(27, 14, 4) if random.random() > 0.8 else mRGBW(0,0,0))
+        self.strip.show()
+
 
     def show(self):
         self.strip.show()
