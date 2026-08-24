@@ -70,12 +70,12 @@ if __name__ == '__main__':
         exit()
     elif args.rainbow:
         idx = 0
-        scale = 100
+        scale = 500
         while True:
-            LEDStrip.setAllRainbow(idx, scale,255)
+            LEDStrip.setAllRainbow(idx, scale,10)
             LEDStrip.show()
-            idx += 1
-            if (idx >= 100): 
+            idx += 2
+            if (idx >= scale): 
                 idx = 0
     
     print('Reading maps')
