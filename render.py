@@ -71,6 +71,7 @@ class LEDTape:
         self.strip.setPixelColor(ch, led, color)
     
     def setAllRainbow(self, index, scale, brightness):
+        print('rinaobw')
         for i in range(self.C1_LEN):
             (r,g,b) = self.hsv2rgb(((i + index) / scale) % 1, 1,brightness / 255)
             color = mRGBW(r,g,b)
