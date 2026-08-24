@@ -22,6 +22,7 @@ if __name__ == '__main__':
  #   parser.add_argument('-s','--snake', action='store_true', help='')
 #    parser.add_argument('-t','--two', action='store_true', help='')
     parser.add_argument('-i', '--index', action='store_true', help='')
+    parser.add_argument('-r', '--rainbow', action='store_true', help='')
     parser.add_argument('-s', '--standby', action='store_true', help='')
     args = parser.parse_args()
     
@@ -67,6 +68,15 @@ if __name__ == '__main__':
         LEDStrip.setAll(mRGBW(0,0,0))
         LEDStrip.show()
         exit()
+    elif args.rainbow:
+        idx = 0
+        scale = 100
+        while True:
+            LEDStrip.setAllRainbow(idx, scale,255)
+            LEDStrip.show()
+            idx += 1
+            if (idx >= 100): 
+                idx = 0
     
     print('Reading maps')
     mapFiles = os.listdir('maps')

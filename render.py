@@ -68,6 +68,16 @@ class LEDTape:
 
     def set(self, ch, led, color):
         self.strip.setPixelColor(ch, led, color)
+    
+    def setAllRainbow(self, index, scale, brightness)
+        for i in range(self.C1_LEN):
+            (r,g,b) = hsv2rgb(((i + index) / scale) % 1, 1,brightness / 255)
+            color = mRGBW(r,g,b)
+            self.strip.setPixelColor(0, i, color)
+        for i in range(self.C2_LEN):
+            (r,g,b) = hsv2rgb(((i + index) / scale) % 1, 1,brightness / 255)
+            color = mRGBW(r,g,b)
+            self.strip.setPixelColor(1, i, color)
 
     def christmasLight(self):
         for i in range(self.C1_LEN):
@@ -79,3 +89,6 @@ class LEDTape:
 
     def show(self):
         self.strip.show()
+        
+    def hsv2rgb(h,s,v):
+        return tuple(round(i * 255) for i in colorsys.hsv_to_rgb(h,s,v))
